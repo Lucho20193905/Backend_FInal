@@ -5,7 +5,6 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 const CADENA_CONEXION = process.env.DATABASE_URL || 
     "postgres://postgres:postgres@localhost:5433/postgres"
-
     const sequelize = new Sequelize(CADENA_CONEXION,{
         dialectOptions : {
             ssl : {
