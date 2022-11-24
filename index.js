@@ -88,6 +88,10 @@ app.post("/resena", async (req,resp) => {
     })
 })
 
+app.get("/usuarios", async (req, resp) => {
+    const listausuario = await usuario.findAll()
+    resp.send(listausuario)
+})
 
 app.get("/productos", async (req, resp) => {
     const listaproductos = await producto.findAll()
