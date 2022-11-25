@@ -292,7 +292,7 @@ const sequelize = new Sequelize(CADENA_CONEXION,{
     pcarmado_producto.belongsTo(pcarmado,{
         foreignKey : "pcarmado_id"
     })
-    pc_armado.hasMany(pcarmado_producto,{
+    pcarmado.hasMany(pcarmado_producto,{
         foreignKey : "id"
     })
 

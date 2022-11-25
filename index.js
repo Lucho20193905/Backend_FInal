@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const data = require("./test_data") // importamos data de test
-const { usuario, producto , orden , orden_producto, pc_armado, pc_armado_producto, reporte, resenia} = require("./dao")
+const { usuario, producto , orden , orden_producto, pcarmado, pcarmado_producto, reporte, resenia} = require("./dao")
 
 const PUERTO = process.env.PORT || 4444
 
@@ -21,10 +21,9 @@ app.post("/usuarios", async (req,resp) => {
     const nombre = dataRequest.nombre
     const apellido = dataRequest.apellido
     const correo = dataRequest.correo
-    const cod_post= dataRequest.cod_post
+    const c_postal= dataRequest.c_postal
     const telefono = dataRequest.telefono
     const ciudad = dataRequest.ciudad
-    const departamento = dataRequest.departamento
     const direccion = dataRequest.direccion
     const contrasenia = dataRequest.contrasenia
 
@@ -32,10 +31,9 @@ app.post("/usuarios", async (req,resp) => {
         nombre : nombre,
         apellido : apellido,
         correo : correo,
-        cod_post : cod_post,
+        c_postal : c_postal,
         telefono : telefono,
         ciudad : ciudad,
-        departamento : departamento,
         direccion : direccion,
         contrasenia : contrasenia,
     })
@@ -94,11 +92,11 @@ app.get("/productos", async (req, resp) => {
     resp.send(listaproductos)
 })
 app.get("/pcarmado", async (req, resp) => {
-    const listapcarmado = await pc_armado.findAll()
+    const listapcarmado = await pcarmado.findAll()
     resp.send(listapcarmado)
 })
 app.get("/pcarm_producto", async (req, resp) => {
-    const listapcarm_produto = await pc_armado_producto.findAll()
+    const listapcarm_produto = await pcarmado_producto.findAll()
     resp.send(listapcarm_produto)
 
 })
