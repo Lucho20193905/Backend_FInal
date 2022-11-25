@@ -4,15 +4,13 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 
 const CADENA_CONEXION = process.env.DATABASE_URL || 
-    "postgres://postgres:postgres@localhost:5433/postgres"
-    const sequelize = new Sequelize(CADENA_CONEXION,{
-        dialectOptions : {
-            ssl : {
-                require : true,
-                rejectUnauthorized : false
-            }
-        }
-    })
+    "postgresql://evaluaciones:evaluaciones@localhost:5432/postgres"
+
+const sequelize = new Sequelize(CADENA_CONEXION,{
+    dialectOptions : {
+        ssl: process.env.DATABASE_URL ? true : false
+    }
+})
 
     const usuario = sequelize.define("usuario", {
         id : {
@@ -22,7 +20,7 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         },
         nombre : {
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         apellido: {
             type : DataTypes.STRING(200),
@@ -30,33 +28,28 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         },  
         correo:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
-        contrasena:{
-            type: DataTypes.STRING(200),
-            allowNull : false
-        },
-        direccion: {
+        c_postal: {
             type : DataTypes.STRING(200),
             allowNull : true
         },
-        departamento: {
-            type : DataTypes.STRING(200),
+        telefono: {
+            type : DataTypes.INTEGER,
             allowNull : true
         },
         ciudad: {
             type :  DataTypes.STRING(200),
             allowNull : true
         },
-        cod_post: {
+        direccion: {
             type : DataTypes.STRING(200),
             allowNull : true
         },
-        telefono: {
-            type : DataTypes.INTEGER,
-            allowNull : false
+        contrasenia:{
+            type: DataTypes.STRING(200),
+            allowNull : true
         }
-
     }, {
         timestamps : false,
         freezeTableName : true
@@ -69,19 +62,19 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         },
         nombre:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         precio: {
             type : DataTypes.INTEGER,
-            allowNull : false
-        },  
-        descripcion: {
-            type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         categoria:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
+        },
+        descripcion: {
+            type : DataTypes.STRING(200),
+            allowNull : true
         }
     },
     {
@@ -95,22 +88,22 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
             type: DataTypes.UUID,
             defaultValue : Sequelize.UUIDV4
         },
-        monto:{
-            type : DataTypes.INTEGER,
-            allowNull : false
-        },
-        direccion: {
-            type : DataTypes.STRING(200),
-            allowNull : false
-        },
-        fecha: {
-            type : DataTypes.DATE,
-            allowNull : false
-        },
         usuario_id:{
             type: DataTypes.UUID,
             defaultValue : Sequelize.UUIDV4,
             allowNull : false
+        },
+        monto:{
+            type : DataTypes.INTEGER,
+            allowNull : true
+        },
+        direccion: {
+            type : DataTypes.STRING(200),
+            allowNull : true
+        },
+        fecha: {
+            type : DataTypes.DATE,
+            allowNull : true
         }
     },
     {
@@ -125,11 +118,13 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         },
         orden_id : {
             type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
         },
         producto_id : {
             type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
         }
     },
     {
@@ -144,11 +139,11 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         },
         nombre: {
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         descripcion: {
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         }
     },
     {
@@ -161,15 +156,15 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
             type: DataTypes.UUID,
             defaultValue : Sequelize.UUIDV4
         },
-        pc_armado_id: {
-            
+        pcarmado_id: {
             type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
         },
         producto_id: {
-            
             type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
         }
     },
     {
@@ -182,30 +177,30 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
             type: DataTypes.UUID,
             defaultValue : Sequelize.UUIDV4
         },
+        usuario_id: {
+            type: DataTypes.UUID,
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
+        },
         correo:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         nombre:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         telefono:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         asunto:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         descripcion:{
             type : DataTypes.STRING(200),
-            allowNull : false
-        },
-        usuario_id: {
-            
-            type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            allowNull : true
         }
     },
     {
@@ -213,36 +208,36 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         freezeTableName : true
     })
 
-    const resena =  sequelize.define("resena",{
+    const resenia =  sequelize.define("resenia",{
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
             defaultValue : Sequelize.UUIDV4
         },
+        usuario_id: {
+            type: DataTypes.UUID,
+            defaultValue : Sequelize.UUIDV4,
+            allowNull : false
+        },
         puntaje:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         comentario:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         video:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
         link:{
             type : DataTypes.STRING(200),
-            allowNull : false
+            allowNull : true
         },
-        tipo_resena:{
+        tipo_resenia:{
             type : DataTypes.STRING(200),
-            allowNull : false
-        },
-        usuario_id: {
-            
-            type: DataTypes.UUID,
-            defaultValue : Sequelize.UUIDV4
+            allowNull : true
         }
     },
     {
@@ -258,11 +253,11 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
     usuario.hasMany(reporte,{
         foreignKey : "id"
     })
-    //resena *-------->1 usuario
-    resena.belongsTo(usuario,{
+    //resenia *-------->1 usuario
+    resenia.belongsTo(usuario,{
         foreignKey : "usuario_id"
-        })
-    usuario.hasMany(resena,{
+    })
+    usuario.hasMany(resenia,{
         foreignKey : "id"
     })
     //orden *-------->1 usuario
@@ -294,14 +289,14 @@ const CADENA_CONEXION = process.env.DATABASE_URL ||
         foreignKey : "id"
     })
     //pc_armado_producto *-------->1 pc_armado
-    pc_armado_producto.belongsTo(pc_armado,{
-        foreignKey : "pc_armado_id"
+    pcarmado_producto.belongsTo(pc_armado,{
+        foreignKey : "pcarmado_id"
     })
-    pc_armado.hasMany(pc_armado_producto,{
+    pc_armado.hasMany(pcarmado_producto,{
         foreignKey : "id"
     })
 
-    module.exports = { usuario, producto, orden, orden_producto, pc_armado, pc_armado_producto, reporte, resena }
+    module.exports = { usuario, producto, orden, orden_producto, pc_armado, pcarmado_producto, reporte, resenia }
 /*
 const CADENA_CONEXION = 
     "postgresql://evaluaciones:evaluaciones@localhost:5432/evaluacionesdb"

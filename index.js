@@ -3,9 +3,9 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const data = require("./test_data") // importamos data de test
-const { usuario, producto , orden , orden_producto, pc_armado, pc_armado_producto, reporte, resena} = require("./dao")
+const { usuario, producto , orden , orden_producto, pc_armado, pc_armado_producto, reporte, resenia} = require("./dao")
 
-const PUERTO = process.env.PORT || 4445
+const PUERTO = process.env.PORT || 4444
 
 const app = express()
 app.use(bodyParser.json())
@@ -26,7 +26,7 @@ app.post("/usuarios", async (req,resp) => {
     const ciudad = dataRequest.ciudad
     const departamento = dataRequest.departamento
     const direccion = dataRequest.direccion
-    const contrasena = dataRequest.contrasena
+    const contrasenia = dataRequest.contrasenia
 
     await usuario.create({
         nombre : nombre,
@@ -37,7 +37,7 @@ app.post("/usuarios", async (req,resp) => {
         ciudad : ciudad,
         departamento : departamento,
         direccion : direccion,
-        contrasena : contrasena,
+        contrasenia : contrasenia,
     })
 
     resp.send({
@@ -67,20 +67,20 @@ app.post("/reporte", async (req,resp) => {
         confirmar: "Reporte enviado correctamente"
     })
 })
-app.post("/resena", async (req,resp) => {
+app.post("/resenia", async (req,resp) => {
     const dataRequest = req.body
     const puntaje = dataRequest.puntaje
     const comentario = dataRequest.comentario
     const video = dataRequest.video
     const link = dataRequest.link
-    const tipo_resena = dataRequest.tipo_resena
+    const tipo_resenia = dataRequest.tipo_resenia
     const usuario_id = dataRequest.usuario_id
-    await resena.create({
+    await resenia.create({
         puntaje : puntaje,
         comentario : comentario,
         video : video,
         link : link,
-        tipo_resena : tipo_resena,
+        tipo_resenia : tipo_resenia,
         usuario_id : usuario_id,
     })
     resp.send({
@@ -93,11 +93,11 @@ app.get("/productos", async (req, resp) => {
     const listaproductos = await producto.findAll()
     resp.send(listaproductos)
 })
-app.get("/pcarmadas", async (req, resp) => {
+app.get("/pcarmado", async (req, resp) => {
     const listapcarmado = await pc_armado.findAll()
     resp.send(listapcarmado)
 })
-app.get("/pcarm_produto", async (req, resp) => {
+app.get("/pcarm_producto", async (req, resp) => {
     const listapcarm_produto = await pc_armado_producto.findAll()
     resp.send(listapcarm_produto)
 
