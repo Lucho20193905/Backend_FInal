@@ -131,7 +131,7 @@ const sequelize = new Sequelize(CADENA_CONEXION,{
         timestamps : false,
         freezeTableName : true
     })
-    const pc_armado = sequelize.define("pc_armado",{
+    const pcarmado = sequelize.define("pcarmado",{
         id : {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -150,7 +150,7 @@ const sequelize = new Sequelize(CADENA_CONEXION,{
         timestamps : false,
         freezeTableName : true
     })
-    const pc_armado_producto = sequelize.define("pc_armado_producto",{
+    const pcarmado_producto = sequelize.define("pcarmado_producto",{
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -282,21 +282,21 @@ const sequelize = new Sequelize(CADENA_CONEXION,{
         foreignKey : "id"
     })
     //pc_armado_producto *-------->1 producto
-    pc_armado_producto.belongsTo(producto,{
+    pcarmado_producto.belongsTo(producto,{
         foreignKey : "producto_id"
     })
-    producto.hasMany(pc_armado_producto,{
+    producto.hasMany(pcarmado_producto,{
         foreignKey : "id"
     })
     //pc_armado_producto *-------->1 pc_armado
-    pcarmado_producto.belongsTo(pc_armado,{
+    pcarmado_producto.belongsTo(pcarmado,{
         foreignKey : "pcarmado_id"
     })
     pc_armado.hasMany(pcarmado_producto,{
         foreignKey : "id"
     })
 
-    module.exports = { usuario, producto, orden, orden_producto, pc_armado, pcarmado_producto, reporte, resenia }
+    module.exports = { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia }
 /*
 const CADENA_CONEXION = 
     "postgresql://evaluaciones:evaluaciones@localhost:5432/evaluacionesdb"
