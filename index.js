@@ -93,18 +93,24 @@ app.get("/productos", async (req, resp) => {
   resp.send(listaproductos)
 })
 
+// query parameter "/pcarmado?descripcion=ofimatica&tipo=laptop"
 app.get("/pcarmado", async (req, resp) => {
   const desc = req.query.descripcion
-  console.log(desc)
+  const tipoC = req.query.tipo
+  //console.log(desc +" "+tipoC)
 
-  if (desc == undefined) {
-    const listapcarmado = await pcarmado.findAll()
+  if (tipoC == undefined || tipoC === "-1") {
+    const listapcarmado = await pcarmado.findAll({
+      where : {
+        descripcion: desc
+      }
+    })
     resp.send(listapcarmado)
-
   } else {
     const listapcarmado = await pcarmado.findAll({
       where: {
-        descripcion: desc
+        descripcion: desc,
+        tipo:tipoC
       }
     })
     resp.send(listapcarmado)
@@ -129,84 +135,3 @@ app.get("/orden", async (req, resp) => {
 app.listen(PUERTO, () => {
   console.log(`Servidor web iniciado en puerto ${PUERTO}`)
 })
-/*
-//1. Servicio que nos devuelva una lista de carreras
-// path: "/carreras" metodo: GET
-app.get("/carreras", async (req, resp) => {
-    const listaCarreras = await Carrera.findAll()
-
-    resp.send(listaCarreras)
-})
-
-
-//2. Servicio (endpoint) que nos devuelva una lista de cursos
-// path: "/cursos" metodo: GET
-// query parameter "/cursos?carrera=1"
-app.get("/cursos", async (req, resp) => {
-    const carreraId = req.query.carrera
-
-    if (carreraId == undefined || carreraId === "-1") {
-
-        const listaCursos = await Curso.findAll()
-
-        resp.send(listaCursos)
-    }else {
-        const cursosFiltrados = await Curso.findAll({
-            where : {
-                carrera_id : carreraId
-            }
-        })
-        resp.send(cursosFiltrados)
-    }
-
-})
-
-// 3. Endpoint para listar ciclos
-app.get("/ciclos", async (req, resp) => {
-    const listadoCiclos = await Ciclo.findAll()
-    resp.send(listadoCiclos)
-})
-
-// 4. Endpoint para listar evaluaciones
-// path: "/evaluaciones" metodo: GET
-// query parameter "/evaluaciones?curso=12312&ciclo=23523532"
-app.get("/evaluacion", async (req, resp) => {
-    const cursoId = req.query.curso
-    const cicloId = req.query.ciclo
-
-    if (cicloId == undefined || cicloId === "-1"){
-        // Caso que no se seleccione ciclo
-        const listadoEvaluaciones = await Evaluacion.findAll({
-            where : {
-                curso_id : cursoId
-            }
-        })
-        resp.send(listadoEvaluaciones)
-    }else {
-        // Caso que SI se seleccione ciclo
-        const listadoEvaluaciones = await Evaluacion.findAll({
-            where : {
-                curso_id : cursoId,
-                ciclo_id : cicloId
-            }
-        })
-        resp.send(listadoEvaluaciones)
-    }
-})
-
-// 5: Registro de resolucion de evaluacion
-// Recibir la data en el Cuerpo peticion HTTP (POST)
-// Request:
-// {
-//      estudiante_id : "22344523532",
-//      evaluacion_id : "22344523532",
-//      url : "http://blablac.com/archivo.zip",
-// }
-app.post("/resolucion", (req, resp) => {
-    
-})
-
-app.listen(PUERTO, () => {
-    console.log(`Servidor web iniciado en puerto ${PUERTO}`)
-})
-*/

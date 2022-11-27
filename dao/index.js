@@ -144,6 +144,10 @@ const pcarmado = sequelize.define("pcarmado", {
   descripcion: {
     type: DataTypes.STRING(200),
     allowNull: true
+  },
+  tipo: {
+    type: DataTypes.STRING(200),
+    allowNull: true
   }
 },
   {
