@@ -2,7 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 
-const data = require("./test_data") // importamos data de test
+//const data = require("./test_data") // importamos data de test
 const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia } = require("./dao")
 
 const PUERTO = process.env.PORT || 4444
@@ -97,23 +97,46 @@ app.get("/productos", async (req, resp) => {
 app.get("/pcarmado", async (req, resp) => {
   const desc = req.query.descripcion
   const tipoC = req.query.tipo
-  //console.log(desc +" "+tipoC)
+  console.log(desc + " " + tipoC)
 
-  if (tipoC == undefined || tipoC === "-1") {
-    const listapcarmado = await pcarmado.findAll({
-      where : {
-        descripcion: desc
-      }
-    })
+  if ((tipoC == undefined || tipoC === "-1") && desc == undefined) {
+    console.log("No se activaron filtros")
+    const listapcarmado = await pcarmado.findAll()
     resp.send(listapcarmado)
   } else {
-    const listapcarmado = await pcarmado.findAll({
-      where: {
-        descripcion: desc,
-        tipo:tipoC
+    if (desc == undefined && (tipoC != undefined || tipoC !== "-1")) {
+      console.log("Se activo filtro tipo")
+      const listapcarmado = await pcarmado.findAll({
+        where: {
+          tipo: tipoC
+        }
+      })
+      resp.send(listapcarmado)
+    } else {
+      if (desc != undefined && (tipoC == undefined || tipoC === "-1")) {
+        console.log("Se activo filtro descripcion")
+        const listapcarmado = await pcarmado.findAll({
+          where: {
+            descripcion: desc
+          }
+        })
+        resp.send(listapcarmado)
+      }else{
+        if (desc != undefined && (tipoC != undefined || tipoC !== "-1")) {
+          console.log("Se activaron ambos filtros")
+          const listapcarmado = await pcarmado.findAll({
+            where: {
+              descripcion: desc,
+              tipo: tipoC
+            }
+          })
+          resp.send(listapcarmado)
+        }
       }
-    })
-    resp.send(listapcarmado)
+    }/*
+      if (desc != undefined && (tipoC == undefined || tipoC === "-1")) {
+        
+      }*/
   }
 })
 
