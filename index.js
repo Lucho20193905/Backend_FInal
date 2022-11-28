@@ -3,7 +3,8 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 //const data = require("./test_data") // importamos data de test
-const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia, tipo, descripcion } = require("./dao")
+const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, 
+  reporte, resenia, tipo, descripcion } = require("./dao")
 
 const PUERTO = process.env.PORT || 4444
 
@@ -152,15 +153,16 @@ app.get("/pcarm_producto", async (req, resp) => {
   resp.send(listapcarm_produto)
 
 })
+
 app.get("/historial_compras", async (req, resp) => {
   const listahistorial_compras = await orden_producto.findAll()
   resp.send(listahistorial_compras)
 })
+
 app.get("/orden", async (req, resp) => {
   const listaorden = await orden.findAll()
   resp.send(listaorden)
 })
-
 
 app.listen(PUERTO, () => {
   console.log(`Servidor web iniciado en puerto ${PUERTO}`)
