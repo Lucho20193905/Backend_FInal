@@ -141,19 +141,52 @@ const pcarmado = sequelize.define("pcarmado", {
     type: DataTypes.STRING(200),
     allowNull: true
   },
-  descripcion: {
+  descripcion_id: {
     type: DataTypes.STRING(200),
-    allowNull: true
+    allowNull: false
   },
-  tipo: {
+  tipo_id: {
     type: DataTypes.STRING(200),
-    allowNull: true
+    allowNull: false
   }
 },
   {
     timestamps: false,
     freezeTableName: true
   })
+
+const tipo = sequelize.define("tipo", {
+  id: {
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4
+  },
+  nombre: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false
+  }
+}, {
+  timestamps: false,
+  freezeTableName: true
+})
+
+const descripcion = sequelize.define("descripcion", {
+  id: {
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4
+  },
+  nombre: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false
+  }
+}, {
+  timestamps: false,
+  freezeTableName: true
+})
+
 const pcarmado_producto = sequelize.define("pcarmado_producto", {
   id: {
     primaryKey: true,
@@ -299,8 +332,23 @@ pcarmado_producto.belongsTo(pcarmado, {
 pcarmado.hasMany(pcarmado_producto, {
   foreignKey: "id"
 })
+//pcarmado *-------->1 tipo
+pcarmado.belongsTo(tipo, {
+  foreignKey: "tipo_id"
+})
+tipo.hasMany(pcarmado, {
+  foreignKey: "id"
+})
+//pcarmado *-------->1 descripcion
+pcarmado.belongsTo(descripcion, {
+  foreignKey: "descripcion_id"
+})
+descripcion.hasMany(pcarmado, {
+  foreignKey: "id"
+})
 
-module.exports = { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia }
+module.exports = { usuario, producto, orden, orden_producto, pcarmado,tipo,
+  descripcion, pcarmado_producto, reporte, resenia }
 /*
 const CADENA_CONEXION = 
     "postgresql://evaluaciones:evaluaciones@localhost:5432/evaluacionesdb"

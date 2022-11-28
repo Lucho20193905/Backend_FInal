@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 
 //const data = require("./test_data") // importamos data de test
-const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia } = require("./dao")
+const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, reporte, resenia, tipo, descripcion } = require("./dao")
 
 const PUERTO = process.env.PORT || 4444
 
@@ -99,45 +99,52 @@ app.get("/pcarmado", async (req, resp) => {
   const tipoC = req.query.tipo
   console.log(desc + " " + tipoC)
 
-  if ((tipoC == undefined || tipoC === "-1") && desc == undefined) {
+  if ((tipoC == undefined || tipoC === "-1") && (desc == undefined || desc === "-1")) {
     console.log("No se activaron filtros")
     const listapcarmado = await pcarmado.findAll()
     resp.send(listapcarmado)
   } else {
-    if (desc == undefined && (tipoC != undefined || tipoC !== "-1")) {
+    if ((desc == undefined || desc === "-1") && (tipoC != undefined || tipoC !== "-1")) {
       console.log("Se activo filtro tipo")
       const listapcarmado = await pcarmado.findAll({
         where: {
-          tipo: tipoC
+          tipo_id: tipoC
         }
       })
       resp.send(listapcarmado)
     } else {
-      if (desc != undefined && (tipoC == undefined || tipoC === "-1")) {
+      if ((desc != undefined || desc !== "-1") && (tipoC == undefined || tipoC === "-1")) {
         console.log("Se activo filtro descripcion")
         const listapcarmado = await pcarmado.findAll({
           where: {
-            descripcion: desc
+            descripcion_id: desc
           }
         })
         resp.send(listapcarmado)
-      }else{
-        if (desc != undefined && (tipoC != undefined || tipoC !== "-1")) {
+      } else {
+        if ((desc != undefined || desc !== "-1") && (tipoC != undefined || tipoC !== "-1")) {
           console.log("Se activaron ambos filtros")
           const listapcarmado = await pcarmado.findAll({
             where: {
-              descripcion: desc,
-              tipo: tipoC
+              descripcion_id: desc,
+              tipo_id: tipoC
             }
           })
           resp.send(listapcarmado)
         }
       }
-    }/*
-      if (desc != undefined && (tipoC == undefined || tipoC === "-1")) {
-        
-      }*/
+    }
   }
+})
+
+app.get("/descripcion", async (req, resp) => {
+  const listaDescripcion = await descripcion.findAll()
+  resp.send(listaDescripcion)
+})
+
+app.get("/tipo", async (req, resp) => {
+  const listaTipoPc = await tipo.findAll()
+  resp.send(listaTipoPc)
 })
 
 app.get("/pcarm_producto", async (req, resp) => {
