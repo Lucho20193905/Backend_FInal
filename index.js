@@ -5,7 +5,8 @@ const cors = require("cors")
 const data = require("./test_data") // importamos data de test
 const { usuario, producto , orden , orden_producto, pc_armado, pc_armado_producto, reporte, resena} = require("./dao")
 
-const PUERTO = process.env.PORT || 4445
+/*const PUERTO = process.env.PORT || 4445*/
+const PUERTO = 4447
 
 const app = express()
 app.use(bodyParser.json())
@@ -93,10 +94,21 @@ app.get("/usuarios", async (req, resp) => {
     resp.send(listausuario)
 })
 
-app.get("/productos", async (req, resp) => {
-    const listaproductos = await producto.findAll()
-    resp.send(listaproductos)
+app.get("/componentes", async (req, resp) => {
+        const pcarmado_id = req.query.pc_armado_producto
+        if(pcarmado_id == undefined || pcarmado_id == "-1"){
+            const listaComponentes = await producto.findAll()
+            resp.send(listaComponentes)
+        }
+        else{
+            const componentesFiltrados = await producto.findAll({
+            where : {pcarmado_id : pcarmado_id}})
+            resp.send(componentesFiltrados)
+        }
 })
+
+
+
 app.get("/pcarmadas", async (req, resp) => {
     const listapcarmado = await pc_armado.findAll()
     resp.send(listapcarmado)
@@ -104,16 +116,19 @@ app.get("/pcarmadas", async (req, resp) => {
 app.get("/pcarm_produto", async (req, resp) => {
     const listapcarm_produto = await pc_armado_producto.findAll()
     resp.send(listapcarm_produto)
+    
 
 })
 app.get("/historial_compras", async (req, resp) => {
     const listahistorial_compras = await orden_producto.findAll()
     resp.send(listahistorial_compras)
 })
+
 app.get("/orden", async (req, resp) => {
     const listaorden = await orden.findAll()
     resp.send(listaorden)
     })
+
 
 
 app.listen(PUERTO, () => {

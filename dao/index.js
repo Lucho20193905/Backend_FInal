@@ -3,16 +3,17 @@ const { Sequelize, DataTypes } = require("sequelize");
 // postgres://<USUARIO>:<PASSWORD>@<URL_HOST_BD>:<PUERTO_BD>/<NOMBRE_BD>
 
 
-const CADENA_CONEXION = process.env.DATABASE_URL || 
+const CADENA_CONEXION = /*process.env.DATABASE_URL ||*/ 
     "postgres://postgres:postgres@localhost:5433/postgres"
-    const sequelize = new Sequelize(CADENA_CONEXION,{
+    const sequelize = new Sequelize(CADENA_CONEXION)
+    /*const sequelize = new Sequelize(CADENA_CONEXION,{
         dialectOptions : {
             ssl : {
                 require : true,
                 rejectUnauthorized : false
             }
         }
-    })
+    })*/
 
     const usuario = sequelize.define("usuario", {
         id : {
