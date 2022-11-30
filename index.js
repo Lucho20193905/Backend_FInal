@@ -1,9 +1,10 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const { Client } = require('pg');
 
 //const data = require("./test_data") // importamos data de test
-const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto, 
+const { usuario, producto, orden, orden_producto, pcarmado, pcarmado_producto,
   reporte, resenia, tipo, descripcion } = require("./dao")
 
 const PUERTO = process.env.PORT || 4444
@@ -13,6 +14,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
+
+
+const client = new Client({
+    host: 'localhost',
+    user: 'postgres',
+    database: 'postgres',
+    password: 'postgres',
+    port: 5432,
+});
 
 app.use(cors()) // politica CORS (cualquier origen) <---- TODO: cuidado!!!
 app.use(express.static("assets")) // <-- configuracion de contenido estatico
@@ -54,7 +64,6 @@ app.post("/reporte", async (req, resp) => {
   //se necesitaria esto? 
   const usuario_id = dataRequest.usuario_id
 
-
   await reporte.create({
     correo: correo,
     nombre: nombre,
@@ -90,7 +99,12 @@ app.post("/resenia", async (req, resp) => {
 })
 
 app.get("/productos", async (req, resp) => {
-  const listaproductos = await producto.findAll()
+  await client.connect()
+  //const listaproductos = await producto.findAll()
+  const listaproductos = await client.query(
+    'SELECT * FROM producto ORDER BY uvendidas DESC'
+  )
+
   resp.send(listaproductos)
 })
 
