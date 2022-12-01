@@ -11,7 +11,6 @@ const sequelize = new Sequelize(CADENA_CONEXION, {
   }
 })
 
-sequelize.query("SELECT * FROM producto ORDER BY uvendidas DESC")
 
 const usuario = sequelize.define("usuario", {
   id: {
